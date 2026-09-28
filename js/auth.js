@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 import {
@@ -17,44 +18,49 @@ import { auth, db } from "./firebase-config.js";
 // PASSWORD SHOW / HIDE
 // ============================================
 
-document.querySelectorAll(".eye-btn").forEach(button => {
+document
+  .querySelectorAll(".eye-btn")
+  .forEach((button) => {
 
-  button.addEventListener("click", () => {
+    button.addEventListener("click", () => {
 
-    const targetId = button.dataset.target;
+      const targetId =
+        button.dataset.target;
 
-    const input =
-      document.getElementById(targetId);
+      const input =
+        document.getElementById(targetId);
 
-    if (!input) return;
+      if (!input) {
+        return;
+      }
 
-    if (input.type === "password") {
+      if (input.type === "password") {
 
-      input.type = "text";
+        input.type = "text";
 
-      button.textContent = "🙈";
+        button.textContent = "🙈";
 
-      button.setAttribute(
-        "aria-label",
-        "Hide password"
-      );
+        button.setAttribute(
+          "aria-label",
+          "Hide password"
+        );
 
-    } else {
+      } else {
 
-      input.type = "password";
+        input.type = "password";
 
-      button.textContent = "👁";
+        button.textContent = "👁";
 
-      button.setAttribute(
-        "aria-label",
-        "Show password"
-      );
+        button.setAttribute(
+          "aria-label",
+          "Show password"
+        );
 
-    }
+      }
+
+    });
 
   });
-
-});
 
 
 // ============================================
@@ -73,12 +79,10 @@ if (registerForm) {
 
       event.preventDefault();
 
-
       const message =
         document.getElementById(
           "registerMessage"
         );
-
 
       const name =
         document
@@ -86,19 +90,17 @@ if (registerForm) {
           .value
           .trim();
 
-
       const email =
         document
           .getElementById("registerEmail")
           .value
-          .trim();
-
+          .trim()
+          .toLowerCase();
 
       const password =
         document
           .getElementById("registerPassword")
           .value;
-
 
       const confirmPassword =
         document
@@ -107,17 +109,40 @@ if (registerForm) {
 
 
       message.textContent = "";
+      message.style.color = "#ff5f6d";
+
+
+      // ----------------------------------------
+      // VALIDATION
+      // ----------------------------------------
+
+      if (!name) {
+
+        message.textContent =
+          "Please enter your full name.";
+
+        return;
+      }
+
+
+      if (!email) {
+
+        message.textContent =
+          "Please enter your email.";
+
+        return;
+      }
 
 
       if (
-        password !== confirmPassword
+        password !==
+        confirmPassword
       ) {
 
         message.textContent =
           "Passwords do not match.";
 
         return;
-
       }
 
 
@@ -127,11 +152,14 @@ if (registerForm) {
           "Password must contain at least 6 characters.";
 
         return;
-
       }
 
 
       try {
+
+        // --------------------------------------
+        // CREATE FIREBASE AUTH ACCOUNT
+        // --------------------------------------
 
         const result =
           await createUserWithEmailAndPassword(
@@ -145,10 +173,9 @@ if (registerForm) {
           result.user;
 
 
-        /*
-         * Every public registration
-         * becomes an active Admin.
-         */
+        // --------------------------------------
+        // CREATE ADMIN PROFILE
+        // --------------------------------------
 
         await setDoc(
           doc(
@@ -164,9 +191,16 @@ if (registerForm) {
 
             email: email,
 
+            /*
+             * Public registration creates
+             * an Admin account.
+             */
+
             role: "admin",
 
             status: "active",
+
+            createdBy: null,
 
             createdAt:
               serverTimestamp()
@@ -178,10 +212,13 @@ if (registerForm) {
         message.style.color =
           "#63e6be";
 
-
         message.textContent =
-          "Account created successfully!";
+          "Admin account created successfully!";
 
+
+        // --------------------------------------
+        // OPEN DASHBOARD
+        // --------------------------------------
 
         setTimeout(
           () => {
@@ -206,51 +243,45 @@ if (registerForm) {
           "#ff5f6d";
 
 
-        if (
-          error.code ===
-          "auth/email-already-in-use"
-        ) {
+        switch (error.code) {
 
-          message.textContent =
-            "This email is already registered.";
+          case "auth/email-already-in-use":
 
-        }
+            message.textContent =
+              "This email is already registered.";
 
-        else if (
-          error.code ===
-          "auth/invalid-email"
-        ) {
+            break;
 
-          message.textContent =
-            "Please enter a valid email address.";
 
-        }
+          case "auth/invalid-email":
 
-        else if (
-          error.code ===
-          "auth/weak-password"
-        ) {
+            message.textContent =
+              "Please enter a valid email address.";
 
-          message.textContent =
-            "Password is too weak.";
+            break;
 
-        }
 
-        else if (
-          error.code ===
-          "permission-denied"
-        ) {
+          case "auth/weak-password":
 
-          message.textContent =
-            "Firestore permission denied.";
+            message.textContent =
+              "Password must contain at least 6 characters.";
 
-        }
+            break;
 
-        else {
 
-          message.textContent =
-            "Registration failed: " +
-            error.message;
+          case "permission-denied":
+
+            message.textContent =
+              "Firestore permission denied. Check your Firebase Rules.";
+
+            break;
+
+
+          default:
+
+            message.textContent =
+              "Registration failed: " +
+              error.message;
 
         }
 
@@ -284,13 +315,12 @@ if (loginForm) {
           "loginMessage"
         );
 
-
       const email =
         document
           .getElementById("loginEmail")
           .value
-          .trim();
-
+          .trim()
+          .toLowerCase();
 
       const password =
         document
@@ -299,13 +329,23 @@ if (loginForm) {
 
 
       message.textContent = "";
+      message.style.color = "#ff5f6d";
+
+
+      if (!email || !password) {
+
+        message.textContent =
+          "Please enter email and password.";
+
+        return;
+      }
 
 
       try {
 
-        /*
-         * Login with Firebase
-         */
+        // --------------------------------------
+        // FIREBASE LOGIN
+        // --------------------------------------
 
         const result =
           await signInWithEmailAndPassword(
@@ -319,27 +359,34 @@ if (loginForm) {
           result.user;
 
 
-        /*
-         * Check that Firestore profile exists.
-         */
+        // --------------------------------------
+        // GET FIRESTORE PROFILE
+        // --------------------------------------
 
-        const userSnap =
-          await getDoc(
-            doc(
-              db,
-              "users",
-              user.uid
-            )
+        const userRef =
+          doc(
+            db,
+            "users",
+            user.uid
           );
 
 
+        const userSnap =
+          await getDoc(userRef);
+
+
+        // --------------------------------------
+        // PROFILE NOT FOUND
+        // --------------------------------------
+
         if (!userSnap.exists()) {
+
+          await signOut(auth);
 
           message.textContent =
             "Your account profile was not found.";
 
           return;
-
         }
 
 
@@ -347,29 +394,65 @@ if (loginForm) {
           userSnap.data();
 
 
+        // --------------------------------------
+        // CHECK STATUS
+        // --------------------------------------
+
         if (
           data.status ===
           "disabled"
         ) {
 
+          await signOut(auth);
+
           message.textContent =
             "Your account has been disabled.";
 
           return;
-
         }
 
 
+        // --------------------------------------
+        // CHECK ROLE
+        // --------------------------------------
+
+        const allowedRoles = [
+          "super_admin",
+          "admin",
+          "user"
+        ];
+
+
+        if (
+          !allowedRoles.includes(
+            data.role
+          )
+        ) {
+
+          await signOut(auth);
+
+          message.textContent =
+            "Your account role is not configured correctly.";
+
+          return;
+        }
+
+
+        // --------------------------------------
+        // SUCCESS
+        // --------------------------------------
+
         message.style.color =
           "#63e6be";
-
 
         message.textContent =
           "Login successful!";
 
 
         /*
-         * Go directly to dashboard.
+         * app.js / dashboard will use
+         * the user's role to show the
+         * correct interface.
          */
 
         setTimeout(
@@ -395,47 +478,49 @@ if (loginForm) {
           "#ff5f6d";
 
 
-        if (
-          error.code ===
-          "auth/invalid-credential"
-          ||
-          error.code ===
-          "auth/wrong-password"
-          ||
-          error.code ===
-          "auth/user-not-found"
-        ) {
+        switch (error.code) {
 
-          message.textContent =
-            "Invalid email or password.";
+          case "auth/invalid-credential":
 
-        }
+          case "auth/wrong-password":
 
-        else if (
-          error.code ===
-          "auth/too-many-requests"
-        ) {
+          case "auth/user-not-found":
 
-          message.textContent =
-            "Too many attempts. Please try again later.";
+            message.textContent =
+              "Invalid email or password.";
 
-        }
+            break;
 
-        else if (
-          error.code ===
-          "permission-denied"
-        ) {
 
-          message.textContent =
-            "Firestore permission denied.";
+          case "auth/too-many-requests":
 
-        }
+            message.textContent =
+              "Too many attempts. Please try again later.";
 
-        else {
+            break;
 
-          message.textContent =
-            "Login failed: " +
-            error.message;
+
+          case "auth/user-disabled":
+
+            message.textContent =
+              "This Firebase account has been disabled.";
+
+            break;
+
+
+          case "permission-denied":
+
+            message.textContent =
+              "Firestore permission denied. Check your Firebase Rules.";
+
+            break;
+
+
+          default:
+
+            message.textContent =
+              "Login failed: " +
+              error.message;
 
         }
 
@@ -444,4 +529,4 @@ if (loginForm) {
     }
   );
 
-}
+      }
