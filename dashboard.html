@@ -1,372 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <meta
-    name="theme-color"
-    content="#080b14"
-  >
+<meta name="theme-color" content="#080b14">
 
-  <title>Daily Tasks Manager</title>
+<title>Daily Tasks Manager</title>
 
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
+<link rel="stylesheet" href="css/style.css">
 
-  <style>
+<style>
 
-    body {
-      background: #080b14;
-    }
+body {
+  background: #080b14;
+}
 
-    .dashboard {
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
+.dashboard {
+  min-height: 100vh;
+}
 
-    /* HEADER */
+/* TOPBAR */
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
 
-      height: 70px;
+  height: 70px;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-      padding: 0 24px;
+  padding: 0 24px;
 
-      background: rgba(8, 11, 20, 0.92);
+  background: rgba(8,11,20,.94);
 
-      border-bottom: 1px solid #20283b;
+  border-bottom: 1px solid #20283b;
 
-      backdrop-filter: blur(16px);
-    }
+  backdrop-filter: blur(15px);
+}
 
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .top-logo {
-      width: 42px;
-      height: 42px;
+.logo {
+  width: 42px;
+  height: 42px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      border-radius: 12px;
+  border-radius: 12px;
 
-      background: #5b7cff;
+  background: #5b7cff;
 
-      color: white;
+  font-size: 21px;
+  font-weight: 800;
+}
 
-      font-size: 22px;
-      font-weight: 800;
-    }
+.title {
+  font-weight: 750;
+}
 
-    .top-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
+.subtitle {
+  color: #929bb0;
+  font-size: 12px;
+  margin-top: 2px;
+}
 
-    .top-subtitle {
-      color: #929bb0;
-      font-size: 12px;
-      margin-top: 2px;
-    }
+.logout {
+  border: 1px solid #30394e;
 
-    .logout-btn {
-      border: 1px solid #30394e;
+  background: #111625;
 
-      background: #111625;
+  color: white;
 
-      color: #dce2f2;
+  padding: 9px 14px;
 
-      padding: 9px 15px;
+  border-radius: 10px;
 
-      border-radius: 10px;
+  cursor: pointer;
+}
 
-      cursor: pointer;
 
-      font-weight: 600;
-    }
+/* CONTENT */
 
-    .logout-btn:hover {
-      background: #1a2031;
-    }
+.content {
+  max-width: 1100px;
 
+  margin: auto;
 
-    /* CONTENT */
+  padding: 28px 18px 50px;
+}
 
-    .content {
-      width: 100%;
-      max-width: 1200px;
+.page-heading {
+  display: flex;
 
-      margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
 
-      padding: 30px 20px;
-    }
+  gap: 15px;
 
-    .welcome h1 {
-      font-size: 28px;
-      margin-bottom: 7px;
-    }
+  margin-bottom: 22px;
+}
 
-    .welcome p {
-      color: #929bb0;
-      margin-bottom: 26px;
-    }
+.page-heading h1 {
+  font-size: 27px;
+}
 
+.page-heading p {
+  color: #929bb0;
 
-    /* STATS */
+  margin-top: 5px;
 
-    .stats-grid {
-      display: grid;
+  font-size: 14px;
+}
 
-      grid-template-columns:
-        repeat(4, 1fr);
+.add-btn {
+  border: 0;
 
-      gap: 16px;
+  background: #5b7cff;
 
-      margin-bottom: 30px;
-    }
+  color: white;
 
-    .stat-card {
-      background: #111625;
+  padding: 11px 16px;
 
-      border: 1px solid #20283b;
+  border-radius: 11px;
 
-      border-radius: 18px;
+  font-weight: 700;
 
-      padding: 20px;
-    }
+  cursor: pointer;
+}
 
-    .stat-icon {
-      width: 42px;
-      height: 42px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+/* STATS */
 
-      border-radius: 12px;
+.stats {
+  display: grid;
 
-      background: #1a2236;
+  grid-template-columns:
+    repeat(3,1fr);
 
-      font-size: 20px;
+  gap: 14px;
 
-      margin-bottom: 15px;
-    }
+  margin-bottom: 20px;
+}
 
-    .stat-number {
-      font-size: 28px;
-      font-weight: 800;
-    }
+.stat {
+  background: #111625;
 
-    .stat-label {
-      color: #929bb0;
+  border: 1px solid #20283b;
 
-      font-size: 13px;
+  border-radius: 16px;
 
-      margin-top: 5px;
-    }
+  padding: 18px;
+}
 
+.stat-number {
+  font-size: 26px;
+  font-weight: 800;
+}
 
-    /* SECTIONS */
+.stat-label {
+  color: #929bb0;
 
-    .section-grid {
-      display: grid;
+  font-size: 13px;
 
-      grid-template-columns:
-        1fr 1fr;
+  margin-top: 5px;
+}
 
-      gap: 20px;
-    }
 
-    .panel {
-      background: #111625;
+/* SEARCH */
 
-      border: 1px solid #20283b;
+.search-box {
+  margin-bottom: 18px;
+}
 
-      border-radius: 18px;
+.search-box input {
+  width: 100%;
 
-      overflow: hidden;
-    }
+  height: 48px;
 
-    .panel-header {
-      padding: 18px 20px;
+  padding: 0 15px;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  border-radius: 12px;
 
-      border-bottom: 1px solid #20283b;
-    }
+  border: 1px solid #20283b;
 
-    .panel-header h2 {
-      font-size: 17px;
-    }
+  outline: none;
 
-    .panel-header button {
-      border: 0;
+  background: #111625;
 
-      background: #5b7cff;
+  color: white;
+}
 
-      color: white;
+.search-box input:focus {
+  border-color: #5b7cff;
+}
 
-      padding: 8px 12px;
 
-      border-radius: 9px;
+/* USERS */
 
-      cursor: pointer;
+.users {
+  display: grid;
 
-      font-weight: 600;
-    }
+  gap: 12px;
+}
 
-    .panel-body {
-      padding: 20px;
-    }
+.user-card {
+  background: #111625;
 
+  border: 1px solid #20283b;
 
-    /* QUICK ACTIONS */
+  border-radius: 16px;
 
-    .actions {
-      display: grid;
+  padding: 16px;
 
-      grid-template-columns:
-        repeat(2, 1fr);
+  display: flex;
 
-      gap: 12px;
-    }
+  align-items: center;
 
-    .action {
-      border: 1px solid #252e43;
+  justify-content: space-between;
 
-      background: #0c111e;
+  gap: 15px;
+}
 
-      color: white;
+.user-info {
+  display: flex;
 
-      border-radius: 13px;
+  align-items: center;
 
-      padding: 18px;
+  gap: 13px;
 
-      cursor: pointer;
+  min-width: 0;
+}
 
-      text-align: left;
+.avatar {
+  width: 45px;
+  height: 45px;
 
-      transition: 0.2s;
-    }
+  flex-shrink: 0;
 
-    .action:hover {
-      border-color: #5b7cff;
+  display: flex;
 
-      transform: translateY(-2px);
-    }
+  align-items: center;
+  justify-content: center;
 
-    .action-icon {
-      font-size: 22px;
+  border-radius: 50%;
 
-      margin-bottom: 9px;
-    }
+  background: #202a46;
 
-    .action-title {
-      font-weight: 700;
+  color: #aebcff;
 
-      margin-bottom: 4px;
-    }
+  font-weight: 800;
 
-    .action-text {
-      color: #929bb0;
+  font-size: 17px;
+}
 
-      font-size: 12px;
-    }
+.user-name {
+  font-weight: 700;
 
+  white-space: nowrap;
 
-    /* EMPTY */
+  overflow: hidden;
 
-    .empty {
-      text-align: center;
+  text-overflow: ellipsis;
+}
 
-      padding: 30px 10px;
+.user-email {
+  color: #929bb0;
 
-      color: #929bb0;
-    }
+  font-size: 12px;
 
-    .empty-icon {
-      font-size: 35px;
+  margin-top: 3px;
 
-      margin-bottom: 10px;
-    }
+  white-space: nowrap;
 
+  overflow: hidden;
 
-    /* MOBILE */
+  text-overflow: ellipsis;
+}
 
-    @media (max-width: 800px) {
+.user-actions {
+  display: flex;
 
-      .stats-grid {
-        grid-template-columns:
-          repeat(2, 1fr);
-      }
+  gap: 7px;
+}
 
-      .section-grid {
-        grid-template-columns: 1fr;
-      }
+.small-btn {
+  border: 1px solid #30394e;
 
-    }
+  background: #0d1320;
 
+  color: white;
 
-    @media (max-width: 500px) {
+  padding: 8px 10px;
 
-      .topbar {
-        padding: 0 15px;
-      }
+  border-radius: 9px;
 
-      .top-title {
-        font-size: 15px;
-      }
+  cursor: pointer;
 
-      .content {
-        padding: 24px 15px;
-      }
+  font-size: 12px;
+}
 
-      .welcome h1 {
-        font-size: 24px;
-      }
+.small-btn.delete {
+  color: #ff7d89;
+}
 
-      .stats-grid {
-        gap: 10px;
-      }
 
-      .stat-card {
-        padding: 15px;
-      }
+/* EMPTY */
 
-      .stat-number {
-        font-size: 24px;
-      }
+.empty {
+  text-align: center;
 
-      .actions {
-        grid-template-columns: 1fr;
-      }
+  padding: 45px 15px;
 
-    }
+  background: #111625;
 
-  </style>
+  border: 1px solid #20283b;
+
+  border-radius: 16px;
+
+  color: #929bb0;
+}
+
+.empty-icon {
+  font-size: 38px;
+
+  margin-bottom: 10px;
+}
+
+
+/* MODAL */
+
+.modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 100;
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(0,0,0,.68);
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-card {
+  width: 100%;
+
+  max-width: 430px;
+
+  background: #111625;
+
+  border: 1px solid #283149;
+
+  border-radius: 20px;
+
+  padding: 22px;
+}
+
+.modal-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  font-size: 19px;
+}
+
+.close {
+  border: 0;
+
+  background: transparent;
+
+  color: #929bb0;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.form-field input {
+  width: 100%;
+
+  height: 47px;
+
+  padding: 0 13px;
+
+  border-radius: 11px;
+
+  border: 1px solid #273149;
+
+  background: #0b101d;
+
+  color: white;
+
+  outline: none;
+}
+
+.form-field input:focus {
+  border-color: #5b7cff;
+}
+
+.save-btn {
+  width: 100%;
+
+  height: 48px;
+
+  border: 0;
+
+  border-radius: 11px;
+
+  background: #5b7cff;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.form-message {
+  min-height: 20px;
+
+  margin-top: 10px;
+
+  text-align: center;
+
+  font-size: 13px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .content {
+    padding: 22px 14px 40px;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+  }
+
+  .page-heading h1 {
+    font-size: 23px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .user-card {
+    align-items: flex-start;
+  }
+
+  .user-actions {
+    flex-direction: column;
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -377,315 +516,249 @@
 <div class="dashboard">
 
 
-  <!-- TOP BAR -->
+<header class="topbar">
 
-  <header class="topbar">
+  <div class="brand-area">
 
-    <div class="topbar-left">
+    <div class="logo">
+      ✓
+    </div>
 
-      <div class="top-logo">
-        ✓
+    <div>
+
+      <div class="title">
+        Daily Tasks Manager
       </div>
 
-      <div>
-
-        <div class="top-title">
-          Daily Tasks Manager
-        </div>
-
-        <div class="top-subtitle">
-          Admin Dashboard
-        </div>
-
+      <div class="subtitle">
+        Admin Dashboard
       </div>
 
     </div>
 
+  </div>
 
-    <button
-      id="logoutBtn"
-      class="logout-btn"
+
+  <button
+    id="logoutBtn"
+    class="logout"
+  >
+    Logout
+  </button>
+
+</header>
+
+
+
+<main class="content">
+
+
+<section class="page-heading">
+
+  <div>
+
+    <h1>
+      Users
+    </h1>
+
+    <p id="welcome">
+      Manage your users
+    </p>
+
+  </div>
+
+
+  <button
+    id="openAddUser"
+    class="add-btn"
+  >
+    + Add User
+  </button>
+
+</section>
+
+
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div
+      id="totalUsers"
+      class="stat-number"
     >
-      Logout
-    </button>
+      0
+    </div>
 
-  </header>
+    <div class="stat-label">
+      Total Users
+    </div>
 
-
-
-  <!-- CONTENT -->
-
-  <main class="content">
+  </div>
 
 
-    <!-- WELCOME -->
+  <div class="stat">
 
-    <section class="welcome">
+    <div
+      id="activeUsers"
+      class="stat-number"
+    >
+      0
+    </div>
 
-      <h1>
-        Dashboard
-      </h1>
+    <div class="stat-label">
+      Active Users
+    </div>
 
-      <p id="welcomeText">
-        Welcome back.
-      </p>
-
-    </section>
-
-
-
-    <!-- STATS -->
-
-    <section class="stats-grid">
+  </div>
 
 
-      <div class="stat-card">
+  <div class="stat">
 
-        <div class="stat-icon">
-          👥
-        </div>
+    <div
+      id="totalTasks"
+      class="stat-number"
+    >
+      0
+    </div>
 
-        <div
-          id="totalUsers"
-          class="stat-number"
+    <div class="stat-label">
+      Total Tasks
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<div class="search-box">
+
+  <input
+    id="searchInput"
+    type="search"
+    placeholder="Search users by name or email..."
+  >
+
+</div>
+
+
+
+<section id="usersContainer">
+
+  <div class="empty">
+
+    <div class="empty-icon">
+      👥
+    </div>
+
+    Loading users...
+
+  </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+
+<!-- ADD USER MODAL -->
+
+<div
+  id="userModal"
+  class="modal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <h2>
+        Create User
+      </h2>
+
+      <button
+        id="closeModal"
+        class="close"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="userForm">
+
+
+      <div class="form-field">
+
+        <label>
+          Full Name
+        </label>
+
+        <input
+          id="userName"
+          type="text"
+          placeholder="Enter user name"
+          required
         >
-          0
-        </div>
-
-        <div class="stat-label">
-          Total Users
-        </div>
 
       </div>
 
 
+      <div class="form-field">
 
-      <div class="stat-card">
+        <label>
+          Email
+        </label>
 
-        <div class="stat-icon">
-          📋
-        </div>
-
-        <div
-          id="totalTasks"
-          class="stat-number"
+        <input
+          id="userEmail"
+          type="email"
+          placeholder="user@example.com"
+          required
         >
-          0
-        </div>
-
-        <div class="stat-label">
-          Total Tasks
-        </div>
 
       </div>
 
 
+      <div class="form-field">
 
-      <div class="stat-card">
+        <label>
+          Password
+        </label>
 
-        <div class="stat-icon">
-          ⏳
-        </div>
-
-        <div
-          id="progressTasks"
-          class="stat-number"
+        <input
+          id="userPassword"
+          type="password"
+          placeholder="Minimum 6 characters"
+          minlength="6"
+          required
         >
-          0
-        </div>
-
-        <div class="stat-label">
-          In Progress
-        </div>
 
       </div>
 
 
+      <button
+        class="save-btn"
+        type="submit"
+      >
+        Create User
+      </button>
 
-      <div class="stat-card">
 
-        <div class="stat-icon">
-          ✓
-        </div>
+      <div
+        id="formMessage"
+        class="form-message"
+      ></div>
 
-        <div
-          id="completedTasks"
-          class="stat-number"
-        >
-          0
-        </div>
 
-        <div class="stat-label">
-          Completed
-        </div>
+    </form>
 
-      </div>
-
-
-    </section>
-
-
-
-    <!-- PANELS -->
-
-    <section class="section-grid">
-
-
-      <!-- QUICK ACTIONS -->
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <h2>
-            Quick Actions
-          </h2>
-
-        </div>
-
-
-        <div class="panel-body">
-
-          <div class="actions">
-
-
-            <button
-              class="action"
-              onclick="alert('Users module coming next')"
-            >
-
-              <div class="action-icon">
-                👥
-              </div>
-
-              <div class="action-title">
-                Manage Users
-              </div>
-
-              <div class="action-text">
-                Create, edit and manage users
-              </div>
-
-            </button>
-
-
-
-            <button
-              class="action"
-              onclick="alert('Tasks module coming next')"
-            >
-
-              <div class="action-icon">
-                📋
-              </div>
-
-              <div class="action-title">
-                Manage Tasks
-              </div>
-
-              <div class="action-text">
-                Assign and track tasks
-              </div>
-
-            </button>
-
-
-
-            <button
-              class="action"
-              onclick="alert('Groups module coming next')"
-            >
-
-              <div class="action-icon">
-                👥
-              </div>
-
-              <div class="action-title">
-                User Groups
-              </div>
-
-              <div class="action-text">
-                Organize users into groups
-              </div>
-
-            </button>
-
-
-
-            <button
-              class="action"
-              onclick="alert('Reports module coming next')"
-            >
-
-              <div class="action-icon">
-                📊
-              </div>
-
-              <div class="action-title">
-                Reports
-              </div>
-
-              <div class="action-text">
-                View task progress and analytics
-              </div>
-
-            </button>
-
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- RECENT TASKS -->
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <h2>
-            Recent Tasks
-          </h2>
-
-          <button
-            onclick="alert('Task manager coming next')"
-          >
-            View All
-          </button>
-
-        </div>
-
-
-        <div class="panel-body">
-
-          <div class="empty">
-
-            <div class="empty-icon">
-              📋
-            </div>
-
-            <div>
-              No tasks yet
-            </div>
-
-            <small>
-              Create your first task to see it here.
-            </small>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-    </section>
-
-
-  </main>
+  </div>
 
 </div>
 
@@ -693,35 +766,70 @@
 
 <script type="module">
 
-  import {
-    onAuthStateChanged,
-    signOut
-  } from
-  "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 
-  import {
-    doc,
-    getDoc
-  } from
-  "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
-  import {
-    auth,
-    db
-  } from "./js/firebase-config.js";
+import {
+  auth,
+  db
+} from "./js/firebase-config.js";
 
 
-  /*
-   * Check login
-   */
 
-  onAuthStateChanged(
-    auth,
-    async (user) => {
+let currentAdmin = null;
 
-      if (!user) {
+let allUsers = [];
+
+
+
+/* ================================
+   AUTH CHECK
+================================ */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    if (!user) {
+
+      window.location.href =
+        "index.html";
+
+      return;
+
+    }
+
+
+    try {
+
+      const adminDoc =
+        await getDoc(
+          doc(db, "users", user.uid)
+        );
+
+
+      if (!adminDoc.exists()) {
+
+        await signOut(auth);
 
         window.location.href =
           "index.html";
@@ -731,44 +839,636 @@
       }
 
 
-      try {
-
-        const profile =
-          await getDoc(
-            doc(db, "users", user.uid)
-          );
+      const adminData =
+        adminDoc.data();
 
 
-        if (!profile.exists()) {
+      if (
+        adminData.role !== "admin" &&
+        adminData.role !== "super_admin"
+      ) {
 
-          await signOut(auth);
+        await signOut(auth);
 
-          window.location.href =
-            "index.html";
+        window.location.href =
+          "index.html";
 
-          return;
+        return;
+
+      }
+
+
+      currentAdmin = {
+        uid: user.uid,
+        ...adminData
+      };
+
+
+      document
+        .getElementById("welcome")
+        .textContent =
+        "Welcome, " +
+        (adminData.name || "Admin");
+
+
+      await loadUsers();
+
+    } catch(error) {
+
+      console.error(error);
+
+    }
+
+  }
+);
+
+
+
+/* ================================
+   LOAD USERS
+================================ */
+
+async function loadUsers() {
+
+  try {
+
+    const usersRef =
+      collection(db, "users");
+
+
+    const q =
+      query(
+        usersRef,
+        where(
+          "createdBy",
+          "==",
+          currentAdmin.uid
+        )
+      );
+
+
+    const snapshot =
+      await getDocs(q);
+
+
+    allUsers = [];
+
+
+    snapshot.forEach(
+      (item) => {
+
+        const data =
+          item.data();
+
+
+        /*
+         * Admin profile itself
+         * is not shown as a user.
+         */
+
+        if (
+          item.id !==
+          currentAdmin.uid
+        ) {
+
+          allUsers.push({
+            id: item.id,
+            ...data
+          });
 
         }
 
+      }
+    );
 
-        const data =
-          profile.data();
+
+    updateStats();
+
+    renderUsers(allUsers);
+
+
+  } catch(error) {
+
+    console.error(
+      "Load users error:",
+      error
+    );
+
+
+    document
+      .getElementById("usersContainer")
+      .innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">⚠️</div>
+          Unable to load users.
+        </div>
+      `;
+
+  }
+
+}
+
+
+
+/* ================================
+   STATS
+================================ */
+
+function updateStats() {
+
+  document
+    .getElementById("totalUsers")
+    .textContent =
+    allUsers.length;
+
+
+  document
+    .getElementById("activeUsers")
+    .textContent =
+    allUsers.filter(
+      user =>
+        user.status !== "disabled"
+    ).length;
+
+
+  document
+    .getElementById("totalTasks")
+    .textContent =
+    "0";
+
+}
+
+
+
+/* ================================
+   RENDER USERS
+================================ */
+
+function renderUsers(users) {
+
+  const container =
+    document.getElementById(
+      "usersContainer"
+    );
+
+
+  if (!users.length) {
+
+    container.innerHTML = `
+      <div class="empty">
+
+        <div class="empty-icon">
+          👤
+        </div>
+
+        <div>
+          No users found
+        </div>
+
+        <small>
+          Create your first user.
+        </small>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  users.forEach(
+    (user) => {
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "user-card";
+
+
+      const initial =
+        (user.name || "U")
+          .charAt(0)
+          .toUpperCase();
+
+
+      card.innerHTML = `
+
+        <div class="user-info">
+
+          <div class="avatar">
+            ${initial}
+          </div>
+
+          <div>
+
+            <div class="user-name">
+              ${escapeHTML(
+                user.name || "Unnamed User"
+              )}
+            </div>
+
+            <div class="user-email">
+              ${escapeHTML(
+                user.email || ""
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="user-actions">
+
+          <button
+            class="small-btn"
+            data-view="${user.id}"
+          >
+            View
+          </button>
+
+          <button
+            class="small-btn delete"
+            data-delete="${user.id}"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      `;
+
+
+      container.appendChild(card);
+
+    }
+  );
+
+
+  document
+    .querySelectorAll("[data-view]")
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const user =
+              allUsers.find(
+                item =>
+                  item.id ===
+                  button.dataset.view
+              );
+
+
+            if (!user) return;
+
+
+            alert(
+              "User: " +
+              user.name +
+              "\nEmail: " +
+              user.email +
+              "\nStatus: " +
+              user.status
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll("[data-delete]")
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            deleteUserProfile(
+              button.dataset.delete
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+
+/* ================================
+   SEARCH
+================================ */
+
+document
+  .getElementById("searchInput")
+  .addEventListener(
+    "input",
+    (event) => {
+
+      const value =
+        event.target.value
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        allUsers.filter(
+          user =>
+
+            (user.name || "")
+              .toLowerCase()
+              .includes(value)
+
+            ||
+
+            (user.email || "")
+              .toLowerCase()
+              .includes(value)
+        );
+
+
+      renderUsers(filtered);
+
+    }
+  );
+
+
+
+/* ================================
+   DELETE PROFILE
+================================ */
+
+async function deleteUserProfile(id) {
+
+  const user =
+    allUsers.find(
+      item => item.id === id
+    );
+
+
+  if (!user) return;
+
+
+  const confirmed =
+    confirm(
+      `Delete ${user.name || "this user"}?`
+    );
+
+
+  if (!confirmed) return;
+
+
+  try {
+
+    /*
+     * This deletes the Firestore profile.
+     *
+     * The Authentication account will be
+     * handled later by the secure backend.
+     */
+
+    await deleteDoc(
+      doc(db, "users", id)
+    );
+
+
+    await loadUsers();
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to delete user profile."
+    );
+
+  }
+
+}
+
+
+
+/* ================================
+   ADD USER MODAL
+================================ */
+
+const modal =
+  document.getElementById(
+    "userModal"
+  );
+
+
+document
+  .getElementById("openAddUser")
+  .addEventListener(
+    "click",
+    () => {
+
+      modal.classList.add("show");
+
+    }
+  );
+
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    () => {
+
+      modal.classList.remove("show");
+
+    }
+  );
+
+
+modal.addEventListener(
+  "click",
+  (event) => {
+
+    if (
+      event.target === modal
+    ) {
+
+      modal.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+
+/* ================================
+   CREATE USER PROFILE
+================================ */
+
+document
+  .getElementById("userForm")
+  .addEventListener(
+    "submit",
+    async (event) => {
+
+      event.preventDefault();
+
+
+      const message =
+        document.getElementById(
+          "formMessage"
+        );
+
+
+      message.style.color =
+        "#ff7d89";
+
+
+      const name =
+        document
+          .getElementById("userName")
+          .value
+          .trim();
+
+
+      const email =
+        document
+          .getElementById("userEmail")
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById("userPassword")
+          .value;
+
+
+      /*
+       * IMPORTANT:
+       *
+       * A browser must not create another
+       * Firebase Authentication account using
+       * the Admin's Firebase Auth session.
+       *
+       * Therefore this first mobile version
+       * creates the USER PROFILE only.
+       *
+       * Secure Authentication account creation
+       * will be connected through Cloud Functions.
+       */
+
+
+      if (
+        password.length < 6
+      ) {
+
+        message.textContent =
+          "Password must be at least 6 characters.";
+
+        return;
+
+      }
+
+
+      try {
+
+        /*
+         * Temporary profile ID.
+         *
+         * This will later be replaced by
+         * the Firebase Authentication UID
+         * returned from the secure backend.
+         */
+
+        const profileId =
+          crypto.randomUUID();
+
+
+        await setDoc(
+          doc(
+            db,
+            "users",
+            profileId
+          ),
+          {
+
+            uid: profileId,
+
+            name: name,
+
+            email: email,
+
+            role: "user",
+
+            status: "active",
+
+            createdBy:
+              currentAdmin.uid,
+
+            createdAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        message.style.color =
+          "#63e6be";
+
+
+        message.textContent =
+          "User profile created.";
 
 
         document
-          .getElementById("welcomeText")
-          .textContent =
-          "Welcome back, " +
-          (data.name || "Admin") +
-          ".";
+          .getElementById(
+            "userForm"
+          )
+          .reset();
 
 
-      } catch (error) {
+        await loadUsers();
 
-        console.error(
-          "Profile error:",
-          error
+
+        setTimeout(
+          () => {
+
+            modal.classList.remove(
+              "show"
+            );
+
+            message.textContent =
+              "";
+
+          },
+          800
         );
+
+
+      } catch(error) {
+
+        console.error(error);
+
+
+        message.textContent =
+          "Unable to create user.";
 
       }
 
@@ -776,38 +1476,64 @@
   );
 
 
-  /*
-   * Logout
-   */
 
-  document
-    .getElementById("logoutBtn")
-    .addEventListener(
-      "click",
-      async () => {
+/* ================================
+   ESCAPE HTML
+================================ */
 
-        try {
+function escapeHTML(value) {
 
-          await signOut(auth);
+  return String(value)
 
-          window.location.href =
-            "index.html";
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
 
-        } catch (error) {
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
 
-          console.error(
-            "Logout error:",
-            error
-          );
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
 
-        }
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
 
-      }
+    .replaceAll(
+      "'",
+      "&#039;"
     );
+
+}
+
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await signOut(auth);
+
+      window.location.href =
+        "index.html";
+
+    }
+  );
+
 
 </script>
 
-
 </body>
-
 </html>
