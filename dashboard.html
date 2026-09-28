@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
 
+  <title>Daily Tasks Manager - Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <main class="auth-page">
+
+    <section class="auth-card">
+
+      <div class="brand">
+
+        <div class="brand-icon">✓</div>
+
+        <h1>Dashboard</h1>
+
+        <p>
+          Daily Tasks Manager
+        </p>
+
+      </div>
+
+      <div style="text-align:center;">
+
+        <p style="color:#929bb0; margin-bottom:20px;">
+          Login successful.
+        </p>
+
+        <button
+          id="logoutBtn"
+          class="primary-btn"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script type="module">
+
+    import {
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    import {
+      auth
+    } from "./js/firebase-config.js";
+
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async () => {
+
+        try {
+
+          await signOut(auth);
+
+          window.location.href = "index.html";
+
+        } catch (error) {
+
+          console.error(error);
+
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
