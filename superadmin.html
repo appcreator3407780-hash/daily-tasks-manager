@@ -1,0 +1,2948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta name="theme-color" content="#080b14">
+
+<title>Super Admin — Daily Tasks Manager</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  background: #080b14;
+
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* =====================================
+   LOADING
+===================================== */
+
+.loading-screen {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 20px;
+}
+
+.loading-box {
+  max-width: 430px;
+}
+
+.loading-icon {
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: #5b7cff;
+
+  font-size: 28px;
+}
+
+.loading-title {
+  font-size: 24px;
+  font-weight: 800;
+
+  margin-bottom: 8px;
+}
+
+.loading-text {
+  color: #929bb0;
+
+  line-height: 1.5;
+}
+
+.error-text {
+  color: #ff7d89;
+
+  margin-top: 12px;
+
+  word-break: break-word;
+}
+
+
+/* =====================================
+   APP
+===================================== */
+
+.app {
+  display: none;
+
+  min-height: 100vh;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+
+  position: fixed;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 250px;
+
+  background: #0d1220;
+
+  border-right: 1px solid #20283b;
+
+  padding: 20px 14px;
+
+  z-index: 50;
+}
+
+.brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 5px 9px 25px;
+}
+
+.brand-logo {
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #5b7cff;
+
+  font-weight: 900;
+
+  font-size: 20px;
+}
+
+.brand-title {
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.brand-subtitle {
+
+  color: #929bb0;
+
+  font-size: 11px;
+
+  margin-top: 3px;
+}
+
+
+/* NAV */
+
+.nav {
+
+  display: grid;
+
+  gap: 5px;
+}
+
+.nav-btn {
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  border: 1px solid transparent;
+
+  border-radius: 11px;
+
+  background: transparent;
+
+  color: #aab3c7;
+
+  text-align: left;
+
+  transition: .2s;
+}
+
+.nav-btn:hover {
+
+  background: #141a2a;
+
+  color: white;
+}
+
+.nav-btn.active {
+
+  background: #18203a;
+
+  border-color: #29365e;
+
+  color: white;
+}
+
+.nav-icon {
+
+  width: 22px;
+
+  text-align: center;
+
+  font-size: 17px;
+}
+
+.nav-label {
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+
+/* =====================================
+   SIDEBAR USER
+===================================== */
+
+.sidebar-user {
+
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 15px;
+
+  padding: 12px;
+
+  border: 1px solid #20283b;
+
+  border-radius: 13px;
+
+  background: #111625;
+}
+
+.user-email {
+
+  color: #929bb0;
+
+  font-size: 11px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  margin-bottom: 9px;
+}
+
+.logout-btn {
+
+  width: 100%;
+
+  padding: 9px;
+
+  border-radius: 9px;
+
+  border: 1px solid #30394e;
+
+  background: #0c111d;
+
+  color: white;
+
+  font-size: 12px;
+}
+
+
+/* =====================================
+   MAIN
+===================================== */
+
+.main {
+
+  margin-left: 250px;
+
+  min-height: 100vh;
+}
+
+
+/* TOPBAR */
+
+.topbar {
+
+  height: 70px;
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 40;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 25px;
+
+  background: rgba(8,11,20,.95);
+
+  border-bottom: 1px solid #20283b;
+
+  backdrop-filter: blur(15px);
+}
+
+.mobile-menu {
+
+  display: none;
+
+  border: 1px solid #30394e;
+
+  background: #111625;
+
+  color: white;
+
+  border-radius: 9px;
+
+  padding: 8px 11px;
+}
+
+.top-title {
+
+  font-size: 17px;
+
+  font-weight: 750;
+}
+
+.top-subtitle {
+
+  color: #929bb0;
+
+  font-size: 12px;
+
+  margin-top: 3px;
+}
+
+.role-badge {
+
+  padding: 7px 11px;
+
+  border-radius: 20px;
+
+  background: #18203a;
+
+  border: 1px solid #303d68;
+
+  color: #aebcff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================
+   CONTENT
+===================================== */
+
+.content {
+
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding: 28px 24px 50px;
+}
+
+
+/* =====================================
+   SECTIONS
+===================================== */
+
+.page {
+
+  display: none;
+}
+
+.page.active {
+
+  display: block;
+}
+
+.page-heading {
+
+  margin-bottom: 22px;
+}
+
+.page-heading h1 {
+
+  margin: 0;
+
+  font-size: 28px;
+}
+
+.page-heading p {
+
+  margin: 7px 0 0;
+
+  color: #929bb0;
+
+  font-size: 14px;
+}
+
+
+/* =====================================
+   STAT CARDS
+===================================== */
+
+.stats {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 22px;
+}
+
+.stat {
+
+  background: #111625;
+
+  border: 1px solid #20283b;
+
+  border-radius: 16px;
+
+  padding: 18px;
+}
+
+.stat-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.stat-icon {
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #1b2540;
+
+  font-size: 17px;
+}
+
+.stat-number {
+
+  margin-top: 15px;
+
+  font-size: 28px;
+
+  font-weight: 850;
+}
+
+.stat-label {
+
+  margin-top: 4px;
+
+  color: #929bb0;
+
+  font-size: 12px;
+}
+
+
+/* =====================================
+   PANEL
+===================================== */
+
+.panel {
+
+  background: #111625;
+
+  border: 1px solid #20283b;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  margin-bottom: 20px;
+}
+
+.panel-header {
+
+  padding: 17px 18px;
+
+  border-bottom: 1px solid #20283b;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.panel-title {
+
+  font-size: 15px;
+
+  font-weight: 750;
+}
+
+.panel-subtitle {
+
+  color: #929bb0;
+
+  font-size: 11px;
+
+  margin-top: 4px;
+}
+
+
+/* =====================================
+   SEARCH
+===================================== */
+
+.search {
+
+  width: 100%;
+
+  max-width: 350px;
+
+  height: 40px;
+
+  padding: 0 12px;
+
+  border-radius: 9px;
+
+  border: 1px solid #293149;
+
+  outline: none;
+
+  background: #0b101d;
+
+  color: white;
+}
+
+.search:focus {
+
+  border-color: #5b7cff;
+}
+
+
+/* =====================================
+   TABLE
+===================================== */
+
+.table-wrap {
+
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 650px;
+}
+
+th,
+td {
+
+  padding: 14px 16px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #20283b;
+
+  font-size: 12px;
+}
+
+th {
+
+  color: #929bb0;
+
+  font-weight: 650;
+
+  background: #0e1422;
+}
+
+td {
+
+  color: #e9ecf4;
+}
+
+tr:last-child td {
+
+  border-bottom: 0;
+}
+
+
+/* =====================================
+   BADGES
+===================================== */
+
+.badge {
+
+  display: inline-flex;
+
+  padding: 5px 8px;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.badge-active {
+
+  background: #123329;
+
+  color: #63e6be;
+}
+
+.badge-disabled {
+
+  background: #351b22;
+
+  color: #ff7d89;
+}
+
+.badge-admin {
+
+  background: #222d52;
+
+  color: #aebcff;
+}
+
+.badge-user {
+
+  background: #24231c;
+
+  color: #ffd66b;
+}
+
+
+/* =====================================
+   EMPTY
+===================================== */
+
+.empty {
+
+  padding: 50px 20px;
+
+  text-align: center;
+
+  color: #929bb0;
+}
+
+.empty-icon {
+
+  font-size: 38px;
+
+  margin-bottom: 10px;
+}
+
+
+/* =====================================
+   ACTION BUTTON
+===================================== */
+
+.action-btn {
+
+  padding: 7px 10px;
+
+  border-radius: 8px;
+
+  border: 1px solid #30394e;
+
+  background: #0d1320;
+
+  color: white;
+
+  font-size: 11px;
+
+  margin-right: 4px;
+}
+
+.action-btn:hover {
+
+  border-color: #5b7cff;
+}
+
+
+/* =====================================
+   OVERLAY
+===================================== */
+
+.overlay {
+
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 45;
+
+  background: rgba(0,0,0,.55);
+}
+
+.overlay.show {
+
+  display: block;
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:950px) {
+
+  .sidebar {
+
+    transform: translateX(-100%);
+
+    transition: transform .25s;
+  }
+
+  .sidebar.open {
+
+    transform: translateX(0);
+  }
+
+  .main {
+
+    margin-left: 0;
+  }
+
+  .mobile-menu {
+
+    display: block;
+  }
+
+  .stats {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media(max-width:600px) {
+
+  .topbar {
+
+    padding: 0 14px;
+  }
+
+  .role-badge {
+
+    display: none;
+  }
+
+  .content {
+
+    padding: 22px 14px 40px;
+  }
+
+  .stats {
+
+    grid-template-columns: 1fr;
+  }
+
+  .page-heading h1 {
+
+    font-size: 23px;
+  }
+
+  .panel-header {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .search {
+
+    max-width: 100%;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     LOADING SCREEN
+===================================== -->
+
+<div
+  id="loadingScreen"
+  class="loading-screen"
+>
+
+  <div class="loading-box">
+
+    <div class="loading-icon">
+      👑
+    </div>
+
+    <div class="loading-title">
+      Daily Tasks Manager
+    </div>
+
+    <div class="loading-text">
+      Verifying Super Admin access...
+    </div>
+
+    <div
+      id="loadingError"
+      class="error-text"
+    ></div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================
+     APPLICATION
+===================================== -->
+
+<div
+  id="app"
+  class="app"
+>
+
+
+<!-- SIDEBAR -->
+
+<aside
+  id="sidebar"
+  class="sidebar"
+>
+
+  <div class="brand">
+
+    <div class="brand-logo">
+      ✓
+    </div>
+
+    <div>
+
+      <div class="brand-title">
+        Daily Tasks Manager
+      </div>
+
+      <div class="brand-subtitle">
+        Super Admin
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <nav class="nav">
+
+    <button
+      class="nav-btn active"
+      data-page="overview"
+    >
+
+      <span class="nav-icon">
+        ◈
+      </span>
+
+      <span class="nav-label">
+        Overview
+      </span>
+
+    </button>
+
+
+    <button
+      class="nav-btn"
+      data-page="admins"
+    >
+
+      <span class="nav-icon">
+        👨‍💼
+      </span>
+
+      <span class="nav-label">
+        Admins
+      </span>
+
+    </button>
+
+
+    <button
+      class="nav-btn"
+      data-page="users"
+    >
+
+      <span class="nav-icon">
+        👥
+      </span>
+
+      <span class="nav-label">
+        Users
+      </span>
+
+    </button>
+
+
+    <button
+      class="nav-btn"
+      data-page="tasks"
+    >
+
+      <span class="nav-icon">
+        ✓
+      </span>
+
+      <span class="nav-label">
+        Tasks
+      </span>
+
+    </button>
+
+
+    <button
+      class="nav-btn"
+      data-page="groups"
+    >
+
+      <span class="nav-icon">
+        ◉
+      </span>
+
+      <span class="nav-label">
+        Groups
+      </span>
+
+    </button>
+
+  </nav>
+
+
+  <div class="sidebar-user">
+
+    <div
+      id="sideEmail"
+      class="user-email"
+    >
+      superadmin
+    </div>
+
+    <button
+      id="logoutBtn"
+      class="logout-btn"
+    >
+      Logout
+    </button>
+
+  </div>
+
+</aside>
+
+
+
+<div
+  id="overlay"
+  class="overlay"
+></div>
+
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+
+<header class="topbar">
+
+  <div
+    style="
+      display:flex;
+      align-items:center;
+      gap:12px;
+    "
+  >
+
+    <button
+      id="mobileMenu"
+      class="mobile-menu"
+    >
+      ☰
+    </button>
+
+    <div>
+
+      <div
+        id="topTitle"
+        class="top-title"
+      >
+        Overview
+      </div>
+
+      <div class="top-subtitle">
+        System administration
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="role-badge">
+    SUPER ADMIN
+  </div>
+
+</header>
+
+
+
+<main class="content">
+
+
+<!-- =====================================
+     OVERVIEW
+===================================== -->
+
+<section
+  id="page-overview"
+  class="page active"
+>
+
+  <div class="page-heading">
+
+    <h1>
+      Overview
+    </h1>
+
+    <p>
+      Complete overview of Daily Tasks Manager.
+    </p>
+
+  </div>
+
+
+  <section class="stats">
+
+    <div class="stat">
+
+      <div class="stat-top">
+
+        <span>
+          Admins
+        </span>
+
+        <div class="stat-icon">
+          👨‍💼
+        </div>
+
+      </div>
+
+      <div
+        id="statAdmins"
+        class="stat-number"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Registered administrators
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-top">
+
+        <span>
+          Users
+        </span>
+
+        <div class="stat-icon">
+          👥
+        </div>
+
+      </div>
+
+      <div
+        id="statUsers"
+        class="stat-number"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        All registered users
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-top">
+
+        <span>
+          Tasks
+        </span>
+
+        <div class="stat-icon">
+          ✓
+        </div>
+
+      </div>
+
+      <div
+        id="statTasks"
+        class="stat-number"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Total tasks
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-top">
+
+        <span>
+          Completed
+        </span>
+
+        <div class="stat-icon">
+          ✓
+        </div>
+
+      </div>
+
+      <div
+        id="statCompleted"
+        class="stat-number"
+      >
+        0
+      </div>
+
+      <div class="stat-label">
+        Completed tasks
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <div class="panel-title">
+          System Summary
+        </div>
+
+        <div class="panel-subtitle">
+          Current database information
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="summaryContent"
+      class="empty"
+    >
+
+      Loading system data...
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================
+     ADMINS
+===================================== -->
+
+<section
+  id="page-admins"
+  class="page"
+>
+
+  <div class="page-heading">
+
+    <h1>
+      Admins
+    </h1>
+
+    <p>
+      Manage all administrators in the system.
+    </p>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <div class="panel-title">
+          All Administrators
+        </div>
+
+        <div class="panel-subtitle">
+          Admin accounts registered in the system
+        </div>
+
+      </div>
+
+      <input
+        id="adminSearch"
+        class="search"
+        type="search"
+        placeholder="Search admins..."
+      >
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Name
+            </th>
+
+            <th>
+              Email
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Created
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody
+          id="adminsTable"
+        ></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================
+     USERS
+===================================== -->
+
+<section
+  id="page-users"
+  class="page"
+>
+
+  <div class="page-heading">
+
+    <h1>
+      Users
+    </h1>
+
+    <p>
+      View users created by administrators.
+    </p>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <div class="panel-title">
+          All Users
+        </div>
+
+        <div class="panel-subtitle">
+          Complete user directory
+        </div>
+
+      </div>
+
+      <input
+        id="userSearch"
+        class="search"
+        type="search"
+        placeholder="Search users..."
+      >
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Name
+            </th>
+
+            <th>
+              Email
+            </th>
+
+            <th>
+              Admin
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Created
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody
+          id="usersTable"
+        ></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================
+     TASKS
+===================================== -->
+
+<section
+  id="page-tasks"
+  class="page"
+>
+
+  <div class="page-heading">
+
+    <h1>
+      Tasks
+    </h1>
+
+    <p>
+      Monitor tasks across the entire system.
+    </p>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <div class="panel-title">
+          All Tasks
+        </div>
+
+        <div class="panel-subtitle">
+          Task activity across admins and users
+        </div>
+
+      </div>
+
+      <input
+        id="taskSearch"
+        class="search"
+        type="search"
+        placeholder="Search tasks..."
+      >
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Task
+            </th>
+
+            <th>
+              Assigned To
+            </th>
+
+            <th>
+              Assigned By
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Created
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody
+          id="tasksTable"
+        ></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================
+     GROUPS
+===================================== -->
+
+<section
+  id="page-groups"
+  class="page"
+>
+
+  <div class="page-heading">
+
+    <h1>
+      Groups
+    </h1>
+
+    <p>
+      Organization groups will appear here.
+    </p>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="empty">
+
+      <div class="empty-icon">
+        ◉
+      </div>
+
+      <div>
+        Group management
+      </div>
+
+      <small>
+        Super Admin can create and manage groups in the next phase.
+      </small>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+</div>
+
+
+
+<script type="module">
+
+
+/* =====================================
+   FIREBASE
+===================================== */
+
+import {
+
+  onAuthStateChanged,
+
+  signOut
+
+} from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+
+import {
+
+  collection,
+
+  getDocs,
+
+  getDoc,
+
+  doc
+
+} from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+import {
+
+  auth,
+
+  db
+
+} from
+"./js/firebase-config.js";
+
+
+
+/* =====================================
+   STATE
+===================================== */
+
+let currentSuperAdmin = null;
+
+let allAdmins = [];
+
+let allUsers = [];
+
+let allTasks = [];
+
+
+
+/* =====================================
+   AUTH CHECK
+===================================== */
+
+onAuthStateChanged(
+  auth,
+  async (firebaseUser) => {
+
+    console.log(
+      "Super Admin auth:",
+      firebaseUser
+    );
+
+
+    if (!firebaseUser) {
+
+      showError(
+        "No active Firebase login session."
+      );
+
+      setTimeout(
+        () => {
+
+          window.location.href =
+            "index.html";
+
+        },
+        1200
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      const profileRef =
+        doc(
+          db,
+          "users",
+          firebaseUser.uid
+        );
+
+
+      const profileSnap =
+        await getDoc(
+          profileRef
+        );
+
+
+      if (
+        !profileSnap.exists()
+      ) {
+
+        showError(
+          "Super Admin profile was not found."
+        );
+
+        return;
+
+      }
+
+
+      const profile =
+        profileSnap.data();
+
+
+      if (
+        profile.role !==
+        "super_admin"
+      ) {
+
+        showError(
+          "Access denied. This account is not a Super Admin."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        profile.status ===
+        "disabled"
+      ) {
+
+        showError(
+          "This Super Admin account is disabled."
+        );
+
+        return;
+
+      }
+
+
+      currentSuperAdmin = {
+
+        uid:
+          firebaseUser.uid,
+
+        ...profile
+
+      };
+
+
+      document
+        .getElementById(
+          "sideEmail"
+        )
+        .textContent =
+        firebaseUser.email ||
+        profile.email ||
+        "Super Admin";
+
+
+      document
+        .getElementById(
+          "loadingScreen"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "app"
+        )
+        .style.display =
+        "block";
+
+
+      await loadSystemData();
+
+
+    } catch (error) {
+
+      console.error(
+        "Super Admin error:",
+        error
+      );
+
+
+      showError(
+        error.code ||
+        error.message
+      );
+
+    }
+
+  }
+);
+
+
+
+/* =====================================
+   LOAD SYSTEM DATA
+===================================== */
+
+async function loadSystemData() {
+
+  await Promise.all([
+    loadAdmins(),
+    loadUsers(),
+    loadTasks()
+  ]);
+
+  updateOverview();
+
+}
+
+
+
+/* =====================================
+   ADMINS
+===================================== */
+
+async function loadAdmins() {
+
+  try {
+
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "users"
+        )
+      );
+
+
+    allAdmins = [];
+
+
+    snapshot.forEach(
+      item => {
+
+        const data =
+          item.data();
+
+
+        if (
+          data.role ===
+          "admin"
+        ) {
+
+          allAdmins.push({
+
+            id:
+              item.id,
+
+            ...data
+
+          });
+
+        }
+
+      }
+    );
+
+
+    renderAdmins(
+      allAdmins
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "Admins error:",
+      error
+    );
+
+    document
+      .getElementById(
+        "adminsTable"
+      )
+      .innerHTML = `
+
+        <tr>
+
+          <td colspan="5">
+
+            Unable to load admins:
+            ${escapeHTML(
+              error.message
+            )}
+
+          </td>
+
+        </tr>
+
+      `;
+
+  }
+
+}
+
+
+
+/* =====================================
+   USERS
+===================================== */
+
+async function loadUsers() {
+
+  try {
+
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "users"
+        )
+      );
+
+
+    allUsers = [];
+
+
+    snapshot.forEach(
+      item => {
+
+        const data =
+          item.data();
+
+
+        if (
+          data.role ===
+          "user"
+        ) {
+
+          allUsers.push({
+
+            id:
+              item.id,
+
+            ...data
+
+          });
+
+        }
+
+      }
+    );
+
+
+    renderUsers(
+      allUsers
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "Users error:",
+      error
+    );
+
+    document
+      .getElementById(
+        "usersTable"
+      )
+      .innerHTML = `
+
+        <tr>
+
+          <td colspan="5">
+
+            Unable to load users:
+            ${escapeHTML(
+              error.message
+            )}
+
+          </td>
+
+        </tr>
+
+      `;
+
+  }
+
+}
+
+
+
+/* =====================================
+   TASKS
+===================================== */
+
+async function loadTasks() {
+
+  try {
+
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "tasks"
+        )
+      );
+
+
+    allTasks = [];
+
+
+    snapshot.forEach(
+      item => {
+
+        allTasks.push({
+
+          id:
+            item.id,
+
+          ...item.data()
+
+        });
+
+      }
+    );
+
+
+    renderTasks(
+      allTasks
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "Tasks error:",
+      error
+    );
+
+    document
+      .getElementById(
+        "tasksTable"
+      )
+      .innerHTML = `
+
+        <tr>
+
+          <td colspan="5">
+
+            No task data available yet.
+
+          </td>
+
+        </tr>
+
+      `;
+
+  }
+
+}
+
+
+
+/* =====================================
+   OVERVIEW
+===================================== */
+
+function updateOverview() {
+
+  document
+    .getElementById(
+      "statAdmins"
+    )
+    .textContent =
+    allAdmins.length;
+
+
+  document
+    .getElementById(
+      "statUsers"
+    )
+    .textContent =
+    allUsers.length;
+
+
+  document
+    .getElementById(
+      "statTasks"
+    )
+    .textContent =
+    allTasks.length;
+
+
+  document
+    .getElementById(
+      "statCompleted"
+    )
+    .textContent =
+    allTasks.filter(
+      task =>
+        task.status ===
+        "completed"
+    ).length;
+
+
+  document
+    .getElementById(
+      "summaryContent"
+    )
+    .innerHTML = `
+
+      <div style="
+        color:#dce2ef;
+        line-height:1.8;
+      ">
+
+        <strong>
+          Super Admin:
+        </strong>
+
+        ${escapeHTML(
+          currentSuperAdmin.name ||
+          "Super Admin"
+        )}
+
+        <br>
+
+        <strong>
+          Administrators:
+        </strong>
+
+        ${allAdmins.length}
+
+        <br>
+
+        <strong>
+          Users:
+        </strong>
+
+        ${allUsers.length}
+
+        <br>
+
+        <strong>
+          Tasks:
+        </strong>
+
+        ${allTasks.length}
+
+      </div>
+
+    `;
+
+}
+
+
+
+/* =====================================
+   RENDER ADMINS
+===================================== */
+
+function renderAdmins(
+  admins
+) {
+
+  const table =
+    document.getElementById(
+      "adminsTable"
+    );
+
+
+  if (!admins.length) {
+
+    table.innerHTML = `
+
+      <tr>
+
+        <td colspan="5">
+
+          <div class="empty">
+
+            No admins found.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML =
+    admins.map(
+      admin => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(
+              admin.name ||
+              "Unnamed"
+            )}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              admin.email ||
+              ""
+            )}
+          </td>
+
+          <td>
+
+            <span class="
+              badge
+              ${
+                admin.status ===
+                "disabled"
+                ?
+                "badge-disabled"
+                :
+                "badge-active"
+              }
+            ">
+
+              ${
+                admin.status ||
+                "active"
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+            ${formatDate(
+              admin.createdAt
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="action-btn"
+              data-admin="${admin.id}"
+            >
+              View
+            </button>
+
+          </td>
+
+        </tr>
+
+      `
+    )
+    .join("");
+
+
+  document
+    .querySelectorAll(
+      "[data-admin]"
+    )
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const admin =
+              allAdmins.find(
+                item =>
+                  item.id ===
+                  button.dataset.admin
+              );
+
+
+            if (!admin) return;
+
+
+            alert(
+
+              "Admin\n\n" +
+
+              "Name: " +
+              (admin.name || "") +
+
+              "\nEmail: " +
+              (admin.email || "") +
+
+              "\nStatus: " +
+              (admin.status || "")
+
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+
+/* =====================================
+   RENDER USERS
+===================================== */
+
+function renderUsers(
+  users
+) {
+
+  const table =
+    document.getElementById(
+      "usersTable"
+    );
+
+
+  if (!users.length) {
+
+    table.innerHTML = `
+
+      <tr>
+
+        <td colspan="5">
+
+          <div class="empty">
+
+            No users found.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML =
+    users.map(
+      user => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(
+              user.name ||
+              "Unnamed"
+            )}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              user.email ||
+              ""
+            )}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              user.createdBy ||
+              "—"
+            )}
+          </td>
+
+          <td>
+
+            <span class="
+              badge
+              ${
+                user.status ===
+                "disabled"
+                ?
+                "badge-disabled"
+                :
+                "badge-active"
+              }
+            ">
+
+              ${
+                user.status ||
+                "active"
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+            ${formatDate(
+              user.createdAt
+            )}
+          </td>
+
+        </tr>
+
+      `
+    )
+    .join("");
+
+}
+
+
+
+/* =====================================
+   RENDER TASKS
+===================================== */
+
+function renderTasks(
+  tasks
+) {
+
+  const table =
+    document.getElementById(
+      "tasksTable"
+    );
+
+
+  if (!tasks.length) {
+
+    table.innerHTML = `
+
+      <tr>
+
+        <td colspan="5">
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              ✓
+            </div>
+
+            No tasks yet.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML =
+    tasks.map(
+      task => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(
+              task.title ||
+              "Untitled task"
+            )}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              task.assignedTo ||
+              "—"
+            )}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              task.assignedBy ||
+              "—"
+            )}
+          </td>
+
+          <td>
+
+            <span class="
+              badge
+              ${
+                task.status ===
+                "completed"
+                ?
+                "badge-active"
+                :
+                "badge-admin"
+              }
+            ">
+
+              ${
+                task.status ||
+                "assigned"
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+            ${formatDate(
+              task.createdAt
+            )}
+          </td>
+
+        </tr>
+
+      `
+    )
+    .join("");
+
+}
+
+
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+document
+  .querySelectorAll(
+    ".nav-btn"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const page =
+            button.dataset.page;
+
+
+          document
+            .querySelectorAll(
+              ".nav-btn"
+            )
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "active"
+                )
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          document
+            .querySelectorAll(
+              ".page"
+            )
+            .forEach(
+              section =>
+                section.classList.remove(
+                  "active"
+                )
+            );
+
+
+          document
+            .getElementById(
+              "page-" + page
+            )
+            .classList.add(
+              "active"
+            );
+
+
+          const titles = {
+
+            overview:
+              "Overview",
+
+            admins:
+              "Admins",
+
+            users:
+              "Users",
+
+            tasks:
+              "Tasks",
+
+            groups:
+              "Groups"
+
+          };
+
+
+          document
+            .getElementById(
+              "topTitle"
+            )
+            .textContent =
+            titles[page] ||
+            "Dashboard";
+
+
+          closeMobileMenu();
+
+        }
+      );
+
+    }
+  );
+
+
+
+/* =====================================
+   SEARCH ADMINS
+===================================== */
+
+document
+  .getElementById(
+    "adminSearch"
+  )
+  .addEventListener(
+    "input",
+    event => {
+
+      const value =
+        event.target.value
+          .toLowerCase()
+          .trim();
+
+
+      renderAdmins(
+
+        allAdmins.filter(
+          admin =>
+
+            (
+              admin.name ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+
+            ||
+
+            (
+              admin.email ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+        )
+
+      );
+
+    }
+  );
+
+
+
+/* =====================================
+   SEARCH USERS
+===================================== */
+
+document
+  .getElementById(
+    "userSearch"
+  )
+  .addEventListener(
+    "input",
+    event => {
+
+      const value =
+        event.target.value
+          .toLowerCase()
+          .trim();
+
+
+      renderUsers(
+
+        allUsers.filter(
+          user =>
+
+            (
+              user.name ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+
+            ||
+
+            (
+              user.email ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+        )
+
+      );
+
+    }
+  );
+
+
+
+/* =====================================
+   SEARCH TASKS
+===================================== */
+
+document
+  .getElementById(
+    "taskSearch"
+  )
+  .addEventListener(
+    "input",
+    event => {
+
+      const value =
+        event.target.value
+          .toLowerCase()
+          .trim();
+
+
+      renderTasks(
+
+        allTasks.filter(
+          task =>
+
+            (
+              task.title ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+
+            ||
+
+            (
+              task.description ||
+              ""
+            )
+            .toLowerCase()
+            .includes(value)
+        )
+
+      );
+
+    }
+  );
+
+
+
+/* =====================================
+   MOBILE MENU
+===================================== */
+
+document
+  .getElementById(
+    "mobileMenu"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "sidebar"
+        )
+        .classList.toggle(
+          "open"
+        );
+
+
+      document
+        .getElementById(
+          "overlay"
+        )
+        .classList.toggle(
+          "show"
+        );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "overlay"
+  )
+  .addEventListener(
+    "click",
+    closeMobileMenu
+  );
+
+
+function closeMobileMenu() {
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    .classList.remove(
+      "open"
+    );
+
+
+  document
+    .getElementById(
+      "overlay"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+
+/* =====================================
+   LOGOUT
+===================================== */
+
+document
+  .getElementById(
+    "logoutBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      await signOut(
+        auth
+      );
+
+      window.location.href =
+        "index.html";
+
+    }
+  );
+
+
+
+/* =====================================
+   HELPERS
+===================================== */
+
+function formatDate(
+  timestamp
+) {
+
+  if (
+    !timestamp ||
+    !timestamp.toDate
+  ) {
+
+    return "—";
+
+  }
+
+
+  try {
+
+    return timestamp
+      .toDate()
+      .toLocaleDateString();
+
+  } catch {
+
+    return "—";
+
+  }
+
+}
+
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value
+  )
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function showError(
+  message
+) {
+
+  document
+    .querySelector(
+      ".loading-text"
+    )
+    .textContent =
+    "Unable to open dashboard.";
+
+  document
+    .getElementById(
+      "loadingError"
+    )
+    .textContent =
+    message;
+
+}
+
+</script>
+
+</body>
+  </html>
