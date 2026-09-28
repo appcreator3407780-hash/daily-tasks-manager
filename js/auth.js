@@ -1,8 +1,6 @@
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 import {
@@ -24,21 +22,33 @@ document.querySelectorAll(".eye-btn").forEach(button => {
   button.addEventListener("click", () => {
 
     const targetId = button.dataset.target;
-    const input = document.getElementById(targetId);
+
+    const input =
+      document.getElementById(targetId);
 
     if (!input) return;
 
     if (input.type === "password") {
 
       input.type = "text";
+
       button.textContent = "🙈";
-      button.setAttribute("aria-label", "Hide password");
+
+      button.setAttribute(
+        "aria-label",
+        "Hide password"
+      );
 
     } else {
 
       input.type = "password";
+
       button.textContent = "👁";
-      button.setAttribute("aria-label", "Show password");
+
+      button.setAttribute(
+        "aria-label",
+        "Show password"
+      );
 
     }
 
@@ -51,155 +61,203 @@ document.querySelectorAll(".eye-btn").forEach(button => {
 // REGISTER
 // ============================================
 
-const registerForm = document.getElementById("registerForm");
+const registerForm =
+  document.getElementById("registerForm");
+
 
 if (registerForm) {
 
-  registerForm.addEventListener("submit", async (event) => {
+  registerForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    event.preventDefault();
-
-    const message =
-      document.getElementById("registerMessage");
-
-    const name =
-      document.getElementById("registerName").value.trim();
-
-    const email =
-      document.getElementById("registerEmail").value.trim();
-
-    const password =
-      document.getElementById("registerPassword").value;
-
-    const confirmPassword =
-      document.getElementById("confirmPassword").value;
+      event.preventDefault();
 
 
-    message.textContent = "";
-    message.style.color = "#ff5f6d";
-
-
-    // Password check
-    if (password !== confirmPassword) {
-
-      message.textContent =
-        "Passwords do not match.";
-
-      return;
-    }
-
-
-    if (password.length < 6) {
-
-      message.textContent =
-        "Password must contain at least 6 characters.";
-
-      return;
-    }
-
-
-    try {
-
-      // Create Firebase Authentication account
-      const result =
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
+      const message =
+        document.getElementById(
+          "registerMessage"
         );
 
-      const user = result.user;
+
+      const name =
+        document
+          .getElementById("registerName")
+          .value
+          .trim();
 
 
-      // Create user's Firestore profile
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          uid: user.uid,
-          name: name,
-          email: email,
-
-          // Every normal registration is an Admin
-          role: "admin",
-          status: "active",
-
-          createdAt: serverTimestamp()
-        }
-      );
+      const email =
+        document
+          .getElementById("registerEmail")
+          .value
+          .trim();
 
 
-      message.style.color = "#63e6be";
-
-      message.textContent =
-        "Account created successfully!";
-
-
-      // Give Firebase a moment to save
-      setTimeout(() => {
-
-        window.location.href = "dashboard.html";
-
-      }, 800);
+      const password =
+        document
+          .getElementById("registerPassword")
+          .value;
 
 
-    } catch (error) {
+      const confirmPassword =
+        document
+          .getElementById("confirmPassword")
+          .value;
 
-      console.error("Registration error:", error);
 
-      message.style.color = "#ff5f6d";
+      message.textContent = "";
 
 
       if (
-        error.code ===
-        "auth/email-already-in-use"
+        password !== confirmPassword
       ) {
 
         message.textContent =
-          "This email is already registered.";
+          "Passwords do not match.";
+
+        return;
 
       }
 
-      else if (
-        error.code ===
-        "auth/invalid-email"
-      ) {
+
+      if (password.length < 6) {
 
         message.textContent =
-          "Please enter a valid email address.";
+          "Password must contain at least 6 characters.";
+
+        return;
 
       }
 
-      else if (
-        error.code ===
-        "auth/weak-password"
-      ) {
+
+      try {
+
+        const result =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user =
+          result.user;
+
+
+        /*
+         * Every public registration
+         * becomes an active Admin.
+         */
+
+        await setDoc(
+          doc(
+            db,
+            "users",
+            user.uid
+          ),
+          {
+
+            uid: user.uid,
+
+            name: name,
+
+            email: email,
+
+            role: "admin",
+
+            status: "active",
+
+            createdAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        message.style.color =
+          "#63e6be";
+
 
         message.textContent =
-          "Password is too weak.";
+          "Account created successfully!";
 
-      }
 
-      else if (
-        error.code ===
-        "permission-denied"
-      ) {
+        setTimeout(
+          () => {
 
-        message.textContent =
-          "Firestore permission denied. Check your Firebase Rules.";
+            window.location.href =
+              "dashboard.html";
 
-      }
+          },
+          500
+        );
 
-      else {
 
-        message.textContent =
-          "Registration failed: " +
-          error.message;
+      } catch (error) {
+
+        console.error(
+          "Registration error:",
+          error
+        );
+
+
+        message.style.color =
+          "#ff5f6d";
+
+
+        if (
+          error.code ===
+          "auth/email-already-in-use"
+        ) {
+
+          message.textContent =
+            "This email is already registered.";
+
+        }
+
+        else if (
+          error.code ===
+          "auth/invalid-email"
+        ) {
+
+          message.textContent =
+            "Please enter a valid email address.";
+
+        }
+
+        else if (
+          error.code ===
+          "auth/weak-password"
+        ) {
+
+          message.textContent =
+            "Password is too weak.";
+
+        }
+
+        else if (
+          error.code ===
+          "permission-denied"
+        ) {
+
+          message.textContent =
+            "Firestore permission denied.";
+
+        }
+
+        else {
+
+          message.textContent =
+            "Registration failed: " +
+            error.message;
+
+        }
 
       }
 
     }
-
-  });
+  );
 
 }
 
@@ -211,174 +269,77 @@ if (registerForm) {
 const loginForm =
   document.getElementById("loginForm");
 
+
 if (loginForm) {
 
-  loginForm.addEventListener("submit", async (event) => {
+  loginForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    event.preventDefault();
-
-    const message =
-      document.getElementById("loginMessage");
-
-    const email =
-      document
-        .getElementById("loginEmail")
-        .value
-        .trim();
-
-    const password =
-      document
-        .getElementById("loginPassword")
-        .value;
+      event.preventDefault();
 
 
-    message.textContent = "";
-    message.style.color = "#ff5f6d";
-
-
-    try {
-
-      // Firebase login
-      const result =
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
+      const message =
+        document.getElementById(
+          "loginMessage"
         );
 
-      const user = result.user;
+
+      const email =
+        document
+          .getElementById("loginEmail")
+          .value
+          .trim();
 
 
-      // Get Firestore profile
-      const userRef =
-        doc(db, "users", user.uid);
-
-      const userSnap =
-        await getDoc(userRef);
+      const password =
+        document
+          .getElementById("loginPassword")
+          .value;
 
 
-      if (!userSnap.exists()) {
-
-        await signOut(auth);
-
-        message.textContent =
-          "Your account profile was not found.";
-
-        return;
-      }
-
-
-      const userData =
-        userSnap.data();
-
-
-      // Disabled accounts cannot login
-      if (userData.status === "disabled") {
-
-        await signOut(auth);
-
-        message.textContent =
-          "Your account has been disabled.";
-
-        return;
-      }
-
-
-      // Active account → Dashboard
-      window.location.href =
-        "dashboard.html";
-
-
-    } catch (error) {
-
-      console.error("Login error:", error);
-
-      message.style.color = "#ff5f6d";
-
-
-      if (
-        error.code === "auth/invalid-credential" ||
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/user-not-found"
-      ) {
-
-        message.textContent =
-          "Invalid email or password.";
-
-      }
-
-      else if (
-        error.code === "auth/too-many-requests"
-      ) {
-
-        message.textContent =
-          "Too many attempts. Please try again later.";
-
-      }
-
-      else if (
-        error.code === "permission-denied"
-      ) {
-
-        message.textContent =
-          "Permission denied. Check Firestore Rules.";
-
-      }
-
-      else {
-
-        message.textContent =
-          "Login failed: " +
-          error.message;
-
-      }
-
-    }
-
-  });
-
-}
-
-
-// ============================================
-// PROTECT DASHBOARD
-// ============================================
-
-if (
-  window.location.pathname.endsWith(
-    "dashboard.html"
-  )
-) {
-
-  onAuthStateChanged(
-    auth,
-    async (user) => {
-
-      if (!user) {
-
-        window.location.href =
-          "index.html";
-
-        return;
-      }
+      message.textContent = "";
 
 
       try {
 
+        /*
+         * Login with Firebase
+         */
+
+        const result =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user =
+          result.user;
+
+
+        /*
+         * Check that Firestore profile exists.
+         */
+
         const userSnap =
           await getDoc(
-            doc(db, "users", user.uid)
+            doc(
+              db,
+              "users",
+              user.uid
+            )
           );
 
 
         if (!userSnap.exists()) {
 
-          await signOut(auth);
-
-          window.location.href =
-            "index.html";
+          message.textContent =
+            "Your account profile was not found.";
 
           return;
+
         }
 
 
@@ -386,31 +347,97 @@ if (
           userSnap.data();
 
 
-        if (data.status === "disabled") {
+        if (
+          data.status ===
+          "disabled"
+        ) {
 
-          await signOut(auth);
-
-          window.location.href =
-            "index.html";
+          message.textContent =
+            "Your account has been disabled.";
 
           return;
+
         }
 
 
-        // Account is active
-        console.log(
-          "Logged in:",
-          data.name,
-          data.role
+        message.style.color =
+          "#63e6be";
+
+
+        message.textContent =
+          "Login successful!";
+
+
+        /*
+         * Go directly to dashboard.
+         */
+
+        setTimeout(
+          () => {
+
+            window.location.href =
+              "dashboard.html";
+
+          },
+          300
         );
 
 
       } catch (error) {
 
         console.error(
-          "Dashboard authentication error:",
+          "Login error:",
           error
         );
+
+
+        message.style.color =
+          "#ff5f6d";
+
+
+        if (
+          error.code ===
+          "auth/invalid-credential"
+          ||
+          error.code ===
+          "auth/wrong-password"
+          ||
+          error.code ===
+          "auth/user-not-found"
+        ) {
+
+          message.textContent =
+            "Invalid email or password.";
+
+        }
+
+        else if (
+          error.code ===
+          "auth/too-many-requests"
+        ) {
+
+          message.textContent =
+            "Too many attempts. Please try again later.";
+
+        }
+
+        else if (
+          error.code ===
+          "permission-denied"
+        ) {
+
+          message.textContent =
+            "Firestore permission denied.";
+
+        }
+
+        else {
+
+          message.textContent =
+            "Login failed: " +
+            error.message;
+
+        }
 
       }
 
