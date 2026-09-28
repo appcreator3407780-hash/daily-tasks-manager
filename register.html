@@ -1,1 +1,110 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>Daily Tasks Manager - Register</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <main class="auth-page">
+    <section class="auth-card">
+
+      <div class="brand">
+        <div class="brand-icon">✓</div>
+        <h1>Create Account</h1>
+        <p>Join Daily Tasks Manager</p>
+      </div>
+
+      <form id="registerForm">
+
+        <div class="field">
+          <label for="registerName">Full Name</label>
+          <input
+            id="registerName"
+            type="text"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="registerEmail">Email</label>
+          <input
+            id="registerEmail"
+            type="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="registerPassword">Password</label>
+
+          <div class="password-box">
+            <input
+              id="registerPassword"
+              type="password"
+              placeholder="Create a password"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            >
+
+            <button
+              type="button"
+              class="eye-btn"
+              data-target="registerPassword"
+              aria-label="Show password"
+            >👁</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+
+          <div class="password-box">
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            >
+
+            <button
+              type="button"
+              class="eye-btn"
+              data-target="confirmPassword"
+              aria-label="Show password"
+            >👁</button>
+          </div>
+        </div>
+
+        <button class="primary-btn" type="submit">
+          Create Account
+        </button>
+
+        <p id="registerMessage" class="message"></p>
+
+      </form>
+
+      <div class="auth-footer">
+        <span>Already have an account?</span>
+        <a href="index.html">Login</a>
+      </div>
+
+    </section>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+
+</body>
+</html>
