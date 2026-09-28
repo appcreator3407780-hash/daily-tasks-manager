@@ -269,10 +269,8 @@ if (loginForm) {
       }
 
       else {
-
-        message.textContent =
-          "Login failed. Please try again.";
-
+  message.textContent =
+    "Error: " + error.code + " — " + error.message;
       }
 
     }
