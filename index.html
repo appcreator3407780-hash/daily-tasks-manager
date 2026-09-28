@@ -1,75 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1020">
-  <title>Daily Tasks Manager - Login</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08101f">
+<title>Daily Tasks Manager</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
+<body class="auth-page">
+<div class="auth-shell">
+  <div class="brand-mark">✓</div>
+  <h1>Daily Tasks Manager</h1>
+  <p class="muted">Manage people. Assign work. Track progress.</p>
 
-<body>
+  <form id="loginForm" class="panel">
+    <h2>Welcome back</h2>
+    <p class="muted">Sign in to continue</p>
 
-  <main class="auth-page">
-    <section class="auth-card">
+    <label>Email<input id="email" type="email" required autocomplete="email"></label>
+    <label>Password
+      <span class="password-wrap">
+        <input id="password" type="password" required autocomplete="current-password">
+        <button type="button" class="eye" data-target="password">👁</button>
+      </span>
+    </label>
 
-      <div class="brand">
-        <div class="brand-icon">✓</div>
-        <h1>Daily Tasks Manager</h1>
-        <p>Manage work. Track progress. Get things done.</p>
-      </div>
+    <button class="primary full" type="submit">Sign In</button>
+    <div id="message" class="message"></div>
+  </form>
 
-      <form id="loginForm">
-
-        <div class="field">
-          <label for="loginEmail">Email</label>
-          <input
-            id="loginEmail"
-            type="email"
-            placeholder="Enter your email"
-            autocomplete="email"
-            required
-          >
-        </div>
-
-        <div class="field">
-          <label for="loginPassword">Password</label>
-
-          <div class="password-box">
-            <input
-              id="loginPassword"
-              type="password"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              required
-            >
-
-            <button
-              type="button"
-              class="eye-btn"
-              data-target="loginPassword"
-              aria-label="Show password"
-            >👁</button>
-          </div>
-        </div>
-
-        <button class="primary-btn" type="submit">
-          Login
-        </button>
-
-        <p id="loginMessage" class="message"></p>
-
-      </form>
-
-      <div class="auth-footer">
-        <span>Don't have an account?</span>
-        <a href="register.html">Create Account</a>
-      </div>
-
-    </section>
-  </main>
-
-  <script type="module" src="js/auth.js"></script>
-
+  <p class="auth-link">Don't have an account? <a href="register.html">Register as Admin</a></p>
+</div>
+<script type="module" src="js/login.js"></script>
 </body>
 </html>
