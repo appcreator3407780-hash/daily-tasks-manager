@@ -1,0 +1,184 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================
+    // HELPER FUNCTIONS
+    // =========================================
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function myProfile() {
+      return get(
+        /databases/$(database)/documents/users/$(request.auth.uid)
+      ).data;
+    }
+
+    function isSuperAdmin() {
+      return signedIn()
+        && myProfile().role == "super_admin";
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && myProfile().role == "admin";
+    }
+
+    function isUser() {
+      return signedIn()
+        && myProfile().role == "user";
+    }
+
+    function isActive() {
+      return signedIn()
+        && myProfile().status != "disabled";
+    }
+
+
+    // =========================================
+    // USERS
+    // =========================================
+
+    match /users/{userId} {
+
+      // User can read own profile.
+      // Admin can read users they created.
+      // Super Admin can read everyone.
+      allow read: if signedIn()
+        && (
+          userId == request.auth.uid
+          || isSuperAdmin()
+          || (
+            isAdmin()
+            && resource.data.createdBy == request.auth.uid
+          )
+        );
+
+
+      // Public registration creates its own profile.
+      // Super Admin can create accounts through backend.
+      allow create: if signedIn()
+        && (
+          userId == request.auth.uid
+          || isSuperAdmin()
+        );
+
+
+      // Own profile update.
+      // Admin can update users they created.
+      // Super Admin can update anyone.
+      allow update: if signedIn()
+        && (
+          userId == request.auth.uid
+          || isSuperAdmin()
+          || (
+            isAdmin()
+            && resource.data.createdBy == request.auth.uid
+          )
+        );
+
+
+      // Only Super Admin can delete accounts directly.
+      allow delete: if isSuperAdmin();
+    }
+
+
+    // =========================================
+    // TASKS
+    // =========================================
+
+    match /tasks/{taskId} {
+
+      // Super Admin can see everything.
+      // Admin can see tasks they created.
+      // User can see tasks assigned to them.
+      allow read: if signedIn()
+        && (
+          isSuperAdmin()
+          || (
+            isAdmin()
+            && resource.data.createdBy == request.auth.uid
+          )
+          || (
+            isUser()
+            && resource.data.assignedTo == request.auth.uid
+          )
+        );
+
+
+      // Admin and Super Admin can create tasks.
+      allow create: if signedIn()
+        && (
+          isSuperAdmin()
+          || (
+            isAdmin()
+            && request.resource.data.createdBy == request.auth.uid
+          )
+        );
+
+
+      // User can update the status of their assigned task.
+      // Admin/Super Admin can update their own/managed tasks.
+      allow update: if signedIn()
+        && (
+          isSuperAdmin()
+          || (
+            isAdmin()
+            && resource.data.createdBy == request.auth.uid
+          )
+          || (
+            isUser()
+            && resource.data.assignedTo == request.auth.uid
+          )
+        );
+
+
+      // Admin can delete their own tasks.
+      // Super Admin can delete any task.
+      allow delete: if signedIn()
+        && (
+          isSuperAdmin()
+          || (
+            isAdmin()
+            && resource.data.createdBy == request.auth.uid
+          )
+        );
+    }
+
+
+    // =========================================
+    // GROUPS
+    // =========================================
+
+    match /groups/{groupId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && (
+          isAdmin()
+          || isSuperAdmin()
+        );
+
+      allow update: if signedIn()
+        && (
+          isAdmin()
+          || isSuperAdmin()
+        );
+
+      allow delete: if isSuperAdmin();
+    }
+
+
+    // =========================================
+    // DENY EVERYTHING ELSE
+    // =========================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
